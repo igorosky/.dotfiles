@@ -62,3 +62,13 @@ alias ls='ls --color'
 
 # Shell integrations
 eval "$(fzf --zsh)"
+
+# Create .rc file if not exists in user directory
+if [ ! -e ~/.rc ]; then
+	touch ~/.rc
+fi
+
+CURRENT_SHELL=zsh
+
+# Source ~/.rc file (it should contain user specific sources so user does not touch this file)
+source ~/.rc
