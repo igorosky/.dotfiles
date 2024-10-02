@@ -1,0 +1,11 @@
+source /opt/ros/noetic/setup.$CURRENT_SHELL
+source /home/igor/catkin_ws/devel/setup.$CURRENT_SHELL
+#export ROS_MASTER_URI=http://10.0.0.10:11311
+#export ROS_IP=10.0.0.55
+
+alias mountnfs="sudo mount 10.0.0.1:/home/nvidia/nfs/ /mnt/nfs"
+alias ssr="ssh nvidia@10.0.0.1"
+alias ssp="ssh ubuntu@10.0.0.10"
+alias ssb="ssh nvidia@10.0.0.19"
+
+alias cls=clear

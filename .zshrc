@@ -37,6 +37,8 @@ autoload -U compinit && compinit
 # Keybindings
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 
 # History
 HISTSIZE=10000
@@ -72,3 +74,11 @@ CURRENT_SHELL=zsh
 
 # Source ~/.rc file (it should contain user specific sources so user does not touch this file)
 source ~/.rc
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# Load Angular CLI autocompletion.
+source <(ng completion script)
