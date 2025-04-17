@@ -1,5 +1,5 @@
 source /opt/ros/humble/setup.$CURRENT_SHELL
-source /home/igor/ros2/install/setup.$CURRENT_SHELL
+source /home/igor/ros2_ws/install/setup.$CURRENT_SHELL
 export ROS_DOMAIN_ID=41
 # export ROS_LOCALHOST_ONLY=1
 export ROS_RUNTIME_DIRECTORY='/home/igor/scorpio_runtime'
@@ -16,8 +16,8 @@ alias ssp="ssh ubuntu@10.0.0.10"
 # alias ssb="ssh nvidia@10.0.0.19"
 
 alias cls=clear
-alias rdep="cd ~/ros2 && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
-alias build="/home/igor/build.bash"
+alias rdep="cd $HOME/ros2_ws && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
+alias build="/home/igor/.colcon_build.sh"
 alias ls=eza
 alias base='docker compose -f /home/igor/ros2/src/core/docker_base/docker-compose.yml'
 alias grep='grep --color=auto'
