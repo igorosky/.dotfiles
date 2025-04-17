@@ -1,11 +1,23 @@
-source /opt/ros/noetic/setup.$CURRENT_SHELL
-source /home/igor/catkin_ws/devel/setup.$CURRENT_SHELL
-#export ROS_MASTER_URI=http://10.0.0.10:11311
-#export ROS_IP=10.0.0.55
+source /opt/ros/humble/setup.$CURRENT_SHELL
+source /home/igor/ros2/install/setup.$CURRENT_SHELL
+export ROS_DOMAIN_ID=41
+# export ROS_LOCALHOST_ONLY=1
+export ROS_RUNTIME_DIRECTORY='/home/igor/scorpio_runtime'
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+# export RMW_IMPLEMENTATION=rmw_zenoh_cpp
+export CYCLONEDDS_URI=${CYCLONEDDS_URI:-"<CycloneDDS><Domain><Discovery><ParticipantIndex>auto</ParticipantIndex><MaxAutoParticipantIndex>100</MaxAutoParticipantIndex></Discovery></Domain></CycloneDDS>"}
+export ZENOH_ROUTER_CONFIG_URI=$HOME/ros2/src/core/docker_base/ros2_runtime/zenoh_config.json5
+export ZENOH_ROUTER_CHECK_ATTEMPTS=0
+export WEB_APP_PATH=/home/igor/web_app
 
-alias mountnfs="sudo mount 10.0.0.1:/home/nvidia/nfs/ /mnt/nfs"
+alias mountnfs="sudo mount 10.0.0.1:/mnt/nfs/ /mnt/nfs"
 alias ssr="ssh nvidia@10.0.0.1"
 alias ssp="ssh ubuntu@10.0.0.10"
-alias ssb="ssh nvidia@10.0.0.19"
+# alias ssb="ssh nvidia@10.0.0.19"
 
 alias cls=clear
+alias rdep="cd ~/ros2 && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
+alias build="/home/igor/build.bash"
+alias ls=eza
+alias base='docker compose -f /home/igor/ros2/src/core/docker_base/docker-compose.yml'
+alias grep='grep --color=auto'

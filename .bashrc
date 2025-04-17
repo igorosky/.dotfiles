@@ -118,3 +118,4 @@ fi
 
 CURRENT_SHELL=bash
 source ~/.rc
+. "$HOME/.cargo/env"
