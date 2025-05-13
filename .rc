@@ -17,7 +17,10 @@ alias ssp="ssh ubuntu@10.0.0.10"
 
 alias cls=clear
 alias rdep="cd $HOME/ros2_ws && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
+alias rtest="/home/igor/.colcon_test.sh"
 alias build="/home/igor/.colcon_build.sh"
 alias ls=eza
+alias tree='ls -l --tree'
 alias base='docker compose -f /home/igor/ros2/src/core/docker_base/docker-compose.yml'
 alias grep='grep --color=auto'
+
