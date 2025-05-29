@@ -1,0 +1,34 @@
+#!/bin/sh
+
+help() {
+  echo 'Usage: for_each [OPTIONS] NAME [COMMAND]'
+  echo 'Options:'
+  echo '  --help -h Displays this message'
+  exit
+}
+
+if [ $# -lt 1 ]; then
+  help
+fi
+
+for arg in "$@"; do
+  case "$arg" in
+  -h|--help)
+    help
+  ;;
+  *)
+    break
+  ;;
+  esac
+done
+
+pattern=$1
+shift 1
+command=$@
+
+while read line; do
+  escaped_line=$(printf '%s\n' "$line" | sed 's/[&/\]/\\&/g')
+  callable=$(echo "$command" | sed "s/$pattern/$escaped_line/g")
+  $callable
+done
+
