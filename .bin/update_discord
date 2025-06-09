@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -e
+
+if [ ! command -v curl ]; then
+  echo 'No curl found'
+  exit 1
+fi
+
+url="https://discord.com/api/download?platform=linux&format=deb"
+echo 'Downloading newset version'
+curl -L -o /tmp/discord.deb $url
+echo 'Installing newest version'
+sudo apt install /tmp/discord.deb
+echo 'Cleaning up'
+rm -rf /tmp/discord.deb
+echo 'Done'

@@ -1,4 +1,4 @@
-PATH=$PATH:$HOME/.bin
+PATH=$PATH:$HOME/.bin:$HOME/.local/bin
 
 source /opt/ros/humble/setup.$CURRENT_SHELL
 source $HOME/ros2_ws/install/setup.$CURRENT_SHELL
@@ -21,8 +21,6 @@ alias cls=clear
 alias rdep="cd $HOME/ros2_ws && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
 alias rtest="$HOME/.colcon_test.sh"
 alias build="$HOME/.colcon_build.sh"
-alias ls=eza
-alias tree='ls -l --tree'
 alias base='docker compose -f $HOME/ros2_ws/src/core/docker_base/docker-compose.yml'
 alias grep='grep --color=auto'
-
+alias web-app='docker run --rm -v /home/igor/web_app/:/usr/local/apache2/htdocs/ -p 80:80 httpd:alpine'
