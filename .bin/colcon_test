@@ -1,0 +1,18 @@
+#!/bin/sh
+
+if [ $# -lt 1 ]; then
+  echo 'First positional argument shall be a path to colon work space'
+  exit 1
+fi
+
+INITIAL_DIR=$(pwd)
+if cd $HOME/ros2_ws; then
+  shift 1
+  colcon build --cmake-clean-cache --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-error $@
+  colcon test $@
+  colcon test-result --verbose
+  cd $INITIAL_DIR
+else
+  echo "Could not enter the directory: $1"
+  exit 1
+fi

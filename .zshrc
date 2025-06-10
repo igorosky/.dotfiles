@@ -24,14 +24,18 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
-zinit light Aloxaf/fzf-tab
+
+# Add fzf
+if command -v fzf > /dev/null 2>&1 || "$HOME/.bin/update_fzf"; then
+  zinit light Aloxaf/fzf-tab
+fi
 
 # Add eza
-command -v eza > /dev/null 2>&1 || $HOME/.bin/update_eza
-
-zinit ice from'gh-r' as'program' sbin'**/eza -> eza' atclone'cp -vf completions/eza.zsh _eza'
-zinit light eza-community/eza
-zinit light z-shell/zsh-eza
+if command -v eza > /dev/null 2>&1 || "$HOME/.bin/update_eza"; then
+  zinit ice from'gh-r' as'program' sbin'**/eza -> eza' atclone'cp -vf completions/eza.zsh _eza'
+  zinit light eza-community/eza
+  zinit light z-shell/zsh-eza
+fi
 
 # Add snippets
 zinit snippet OMZP::sudo

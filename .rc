@@ -19,8 +19,8 @@ alias ssp="ssh ubuntu@10.0.0.10"
 
 alias cls=clear
 alias rdep="cd $HOME/ros2_ws && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
-alias rtest="$HOME/.colcon_test.sh"
-alias build="$HOME/.colcon_build.sh"
+alias rtest="colcon_test $HOME/ros2_ws/"
+alias build="colcon_build $HOME/ros2_ws/"
 alias base='docker compose -f $HOME/ros2_ws/src/core/docker_base/docker-compose.yml'
 alias grep='grep --color=auto'
 alias web-app='docker run --rm -v /home/igor/web_app/:/usr/local/apache2/htdocs/ -p 80:80 httpd:alpine'
