@@ -84,10 +84,15 @@ CURRENT_SHELL=zsh
 # Source ~/.rc file (it should contain user specific sources so user does not touch this file)
 source ~/.rc
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+nvm_dir="$HOME/.nvm"
+if [ -d nvm_dir ]; then
+  export NVM_DIR="$nvm_dir"
+  [ ! -s "$NVM_DIR/nvm.sh" ] || \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  [ ! -s "$NVM_DIR/bash_completion" ] || \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
 
 
 # Load Angular CLI autocompletion.
-# source <(ng completion script)
+if command -v ng > /dev/null 2>&1; then
+  source <(ng completion script)
+fi
