@@ -96,3 +96,13 @@ fi
 if command -v ng > /dev/null 2>&1; then
   source <(ng completion script)
 fi
+
+# ROS2
+if command -v register-python-argcomplete3 > /dev/null 2>&1; then
+  if command -v ros2 > /dev/null 2>&1; then
+    eval "$(register-python-argcomplete3 ros2)"
+  fi
+  if command -v colcon > /dev/null 2>&1; then
+    eval "$(register-python-argcomplete3 colcon)"
+  fi
+fi
