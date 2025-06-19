@@ -1,7 +1,7 @@
 PATH=$PATH:$HOME/.bin:$HOME/.local/bin
 
-source /opt/ros/humble/setup.$CURRENT_SHELL
-source $HOME/ros2_ws/install/setup.$CURRENT_SHELL
+[ ! -s /opt/ros/humble/setup.$CURRENT_SHELL ] || source /opt/ros/humble/setup.$CURRENT_SHELL
+[ ! -s $HOME/ros2_ws/install/setup.$CURRENT_SHELL ] || source $HOME/ros2_ws/install/setup.$CURRENT_SHELL
 export ROS_DOMAIN_ID=41
 # export ROS_LOCALHOST_ONLY=1
 export ROS_RUNTIME_DIRECTORY="$HOME/scorpio_runtime"
@@ -24,3 +24,5 @@ alias build="colcon_build $HOME/ros2_ws/"
 alias base='docker compose -f $HOME/ros2_ws/src/core/docker_base/docker-compose.yml'
 alias grep='grep --color=auto'
 alias web-app='docker run --rm -v /home/igor/web_app/:/usr/local/apache2/htdocs/ -p 80:80 httpd:alpine'
+alias wg-down='nmcli connection down igor-zanbook'
+alias wg-up='nmcli connection up igor-zanbook'
