@@ -8,9 +8,10 @@ fi
 INITIAL_DIR=$(pwd)
 if cd $HOME/ros2_ws; then
   shift 1
-  colcon build --cmake-clean-cache --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-error $@
-  colcon test $@
-  colcon test-result --verbose
+  if colcon build --cmake-clean-cache --cmake-args -DCMAKE_BUILD_TYPE=Release -Wno-error $@; then
+    colcon test $@
+    colcon test-result --verbose
+  fi
   cd $INITIAL_DIR
 else
   echo "Could not enter the directory: $1"

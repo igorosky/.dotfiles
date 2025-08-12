@@ -10,8 +10,8 @@ ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 
 # Download zinit if it is not there
 if [ ! -d "$ZINIT_HOME" ]; then
-	mkdir -p "$(dirname $ZINIT_HOME)"
-	git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+  mkdir -p "$(dirname $ZINIT_HOME)"
+  git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
 
 # Source zinit
@@ -39,9 +39,6 @@ fi
 
 # Add snippets
 zinit snippet OMZP::sudo
-
-# Load autocompletions
-autoload -U compinit && compinit
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
@@ -76,7 +73,7 @@ eval "$(fzf --zsh)"
 
 # Create .rc file if not exists in user directory
 if [ ! -e ~/.rc ]; then
-	touch ~/.rc
+  touch ~/.rc
 fi
 
 CURRENT_SHELL=zsh
@@ -106,3 +103,18 @@ if command -v register-python-argcomplete3 > /dev/null 2>&1; then
     eval "$(register-python-argcomplete3 colcon)"
   fi
 fi
+
+# Create autocompletions directory
+COMPLETIONS_DIR=$HOME/.zfunc
+[ -d $COMPLETIONS_DIR ] || mkdir $COMPLETIONS_DIR
+fpath+=$COMPLETIONS_DIR
+
+if command -v rustup &> /dev/null; then
+  [ -s $COMPLETIONS_DIR/_rustup ] || rustup completions zsh rustup > $COMPLETIONS_DIR/_rustup
+  [ -s $COMPLETIONS_DIR/_cargo ] || rustup completions zsh cargo > $COMPLETIONS_DIR/_cargo
+fi
+
+[ -s $COMPLETIONS_DIR/_spotify_player ] || ! command -v spotify_player &> /dev/null || spotify_player generate zsh > $COMPLETIONS_DIR/_spotify_player
+
+# Load autocompletions
+autoload -U compinit && compinit

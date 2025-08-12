@@ -1,0 +1,9 @@
+#!/bin/sh
+
+START_DIR=$(pwd)
+
+cd "$HOME/ros2_ws_debug"
+
+"$0.sh" "$@"
+
+cd "$START_DIR"
