@@ -1,0 +1,33 @@
+#!/bin/bash
+ 
+set -e
+ 
+DIR_PATH="$1"
+shift 1
+ 
+release() {
+  if ! rmdir "$DIR_PATH"; then
+    echo "Failed to release mutex (remove: $DIR_PATH)" 2>&1
+    exit 1
+  fi
+}
+ 
+premature() {
+  release
+  exit 1
+}
+ 
+while ! mkdir "$DIR_PATH" 2> /dev/null > /dev/null; do
+  sleep 1
+done
+trap 'premature' INT
+trap 'premature' SIGINT
+trap 'premature' SIGTERM
+ 
+set +e
+"$@"
+RETURN_CODE="$?"
+set -e
+ 
+release
+exit "$RETURN_CODE"
