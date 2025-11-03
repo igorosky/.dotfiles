@@ -48,6 +48,8 @@ bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+bindkey "^H" backward-kill-word
+bindkey "^[[3;5~" kill-word
 
 # History
 HISTSIZE=1000
@@ -66,7 +68,21 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+if command -v bat &> /dev/null || "$HOME/.bin/update_bat"; then
+  zstyle ':fzf-tab:complete:*:*' fzf-preview '
+    zsh -c "
+      if [ -z $realpath ]; then
+        true
+      elif [[ -d $realpath ]]; then
+        ls -F --color=always $realpath
+      elif [[ -f $realpath ]]; then
+        bat --color=always --style=numbers,changes --line-range :500 $realpath 2>/dev/null
+      fi
+    "
+  '
+else
+  zstyle ':fzf-tab:complete:*:*' fzf-preview 'ls --color $realpath'
+fi
 
 # Shell integrations
 eval "$(fzf --zsh)"
@@ -112,6 +128,10 @@ fpath+=$COMPLETIONS_DIR
 if command -v rustup &> /dev/null; then
   [ -s $COMPLETIONS_DIR/_rustup ] || rustup completions zsh rustup > $COMPLETIONS_DIR/_rustup
   [ -s $COMPLETIONS_DIR/_cargo ] || rustup completions zsh cargo > $COMPLETIONS_DIR/_cargo
+fi
+
+if command -v bat &> /dev/null || "$HOME/.bin/update_bat"; then
+  [ -s $COMPLETIONS_DIR/_bat ] || bat --completion=zsh > $COMPLETIONS_DIR/_bat
 fi
 
 [ -s $COMPLETIONS_DIR/_spotify_player ] || ! command -v spotify_player &> /dev/null || spotify_player generate zsh > $COMPLETIONS_DIR/_spotify_player
