@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+if command -v cowsay &> /dev/null && command -v lolcat &> /dev/null; then
+  cowsay -- "$@" | lolcat
+else
+  echo "Cowsay or Lolcat is not installed." >&2
+  exit 1
+fi
