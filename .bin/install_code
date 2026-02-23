@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -e
+
+if ! command -v curl > /dev/null 2>&1; then
+  echo 'No curl found'
+  exit 1
+fi
+
+url="https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64"
+tmp="/tmp/code.deb"
+echo 'Downloading newset version'
+curl -L -o $tmp $url
+echo 'Installing newest version'
+sudo apt-get install "$tmp"
+echo 'Cleaning up'
+rm -rf $tmp
+echo 'Done'
