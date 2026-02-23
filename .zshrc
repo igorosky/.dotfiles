@@ -85,7 +85,7 @@ else
 fi
 
 # Shell integrations
-eval "$(fzf --zsh)"
+source <(fzf --zsh)
 
 # Create .rc file if not exists in user directory
 if [ ! -e ~/.rc ]; then
@@ -135,6 +135,7 @@ if command -v bat &> /dev/null || "$HOME/.bin/update_bat"; then
 fi
 
 [ -s $COMPLETIONS_DIR/_spotify_player ] || ! command -v spotify_player &> /dev/null || spotify_player generate zsh > $COMPLETIONS_DIR/_spotify_player
+[ -s $COMPLETIONS_DIR/_git-lfs ] || ! command -v git-lfs &> /dev/null || git-lfs completion zsh > $COMPLETIONS_DIR/_git-lfs
 
 # Load autocompletions
-autoload -U compinit && compinit
+autoload -Uz compinit && compinit

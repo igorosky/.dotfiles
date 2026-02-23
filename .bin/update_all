@@ -4,4 +4,6 @@ sudo apt-get update && sudo apt-get -y upgrade
 update_eza
 update_fzf
 update_bat
-update_discord
+if command -v discord &> /dev/null; then
+  update_discord
+fi
