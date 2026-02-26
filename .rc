@@ -7,10 +7,7 @@ export ROS_DOMAIN_ID=41
 export ROS_LOCALHOST_ONLY=1
 export ROS_RUNTIME_DIRECTORY="$HOME/scorpio_runtime"
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-# export RMW_IMPLEMENTATION=rmw_zenoh_cpp
 export CYCLONEDDS_URI=${CYCLONEDDS_URI:-"<CycloneDDS><Domain><Discovery><ParticipantIndex>auto</ParticipantIndex><MaxAutoParticipantIndex>100</MaxAutoParticipantIndex></Discovery></Domain></CycloneDDS>"}
-export ZENOH_ROUTER_CONFIG_URI=$HOME/ros2/src/core/docker_base/ros2_runtime/zenoh_config.json5
-export ZENOH_ROUTER_CHECK_ATTEMPTS=0
 export WEB_APP_PATH=$HOME/web_app
 
 
@@ -35,8 +32,19 @@ alias rtest="colcon_test $HOME/ros2_ws/"
 alias build="colcon_build $HOME/ros2_ws/"
 alias base='docker compose -f $HOME/ros2_ws/src/core/docker_base/docker-compose.yml'
 alias grep='grep --color=auto'
-alias web-app='docker run --rm -v /home/igor/web_app/:/usr/local/apache2/htdocs/ -p 80:80 httpd:alpine'
-alias wg-down='nmcli connection down igor-zanbook'
-alias wg-up='nmcli connection up igor-zanbook'
+alias web-app='docker run --rm -v "$WEB_APP_PATH"/:/usr/local/apache2/htdocs/ -p 80:80 httpd:alpine'
 alias spt=spotify_player
 alias cout='cowsay_lolcat'
+
+case "$XDG_SESSION_TYPE" in
+  "x11")
+    if command -v xclip &> /dev/null; then
+      alias cpy='xclip -sel clip'
+      alias pst='xclip -sel clip -o'
+    fi ;;
+  "wayland")
+    if command -v wl-paste &> /dev/null; then
+      alias cpy='wl-copy'
+      alias pst='wl-paste'
+    fi ;;
+esac
