@@ -68,21 +68,21 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-if command -v bat &> /dev/null || "$HOME/.bin/update_bat"; then
-  zstyle ':fzf-tab:complete:*:*' fzf-preview '
-    zsh -c "
-      if [ -z $realpath ]; then
-        true
-      elif [[ -d $realpath ]]; then
-        ls -F --color=always $realpath
-      elif [[ -f $realpath ]]; then
-        bat --color=always --style=numbers,changes --line-range :500 $realpath 2>/dev/null
-      fi
-    "
-  '
-else
-  zstyle ':fzf-tab:complete:*:*' fzf-preview 'ls --color $realpath'
-fi
+#if command -v bat &> /dev/null || "$HOME/.bin/update_bat"; then
+#  zstyle ':fzf-tab:complete:*:*' fzf-preview '
+#    zsh -c "
+#      if [ -z $realpath ]; then
+#        true
+#      elif [[ -d $realpath ]]; then
+#        ls -F --color=always $realpath
+#      elif [[ -f $realpath ]]; then
+#        bat --color=always --style=numbers,changes --line-range :500 $realpath 2>/dev/null
+#      fi
+#    "
+#  '
+#else
+#  zstyle ':fzf-tab:complete:*:*' fzf-preview 'ls --color $realpath'
+#fi
 
 # Shell integrations
 source <(fzf --zsh)
@@ -136,6 +136,7 @@ fi
 
 [ -s $COMPLETIONS_DIR/_spotify_player ] || ! command -v spotify_player &> /dev/null || spotify_player generate zsh > $COMPLETIONS_DIR/_spotify_player
 [ -s $COMPLETIONS_DIR/_git-lfs ] || ! command -v git-lfs &> /dev/null || git-lfs completion zsh > $COMPLETIONS_DIR/_git-lfs
+[ -s $COMPLETIONS_DIR/_ast-grep ] || ! command -v ast-grep &> /dev/null || ast-grep completions zsh > $COMPLETIONS_DIR/_ast-grep
 
 # Load autocompletions
 autoload -Uz compinit && compinit

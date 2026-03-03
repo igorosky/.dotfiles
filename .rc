@@ -1,4 +1,4 @@
-PATH=$PATH:$HOME/.bin:$HOME/.local/bin
+PATH=$PATH:$HOME/.bin:$HOME/.local/bin:/opt/go/bin
 [ ! -s $HOME/.cargo/bin ] || PATH=$PATH:$HOME/.cargo/bin
 
 [ ! -s /opt/ros/humble/setup.$CURRENT_SHELL ] || source /opt/ros/humble/setup.$CURRENT_SHELL
