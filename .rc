@@ -1,14 +1,14 @@
-PATH=$PATH:$HOME/.bin:$HOME/.local/bin:/opt/go/bin
-[ ! -s $HOME/.cargo/bin ] || PATH=$PATH:$HOME/.cargo/bin
+PATH="$PATH:$HOME/.bin:$HOME/.local/bin:/opt/go/bin"
+[ ! -s "$HOME"/.cargo/bin ] || PATH="$PATH:$HOME/.cargo/bin"
 
-[ ! -s /opt/ros/humble/setup.$CURRENT_SHELL ] || source /opt/ros/humble/setup.$CURRENT_SHELL
-[ ! -s $HOME/ros2_ws/install/setup.$CURRENT_SHELL ] || source $HOME/ros2_ws/install/setup.$CURRENT_SHELL
+[ ! -s "/opt/ros/humble/setup.$CURRENT_SHELL" ] || source "/opt/ros/humble/setup.$CURRENT_SHELL"
+[ ! -s "$HOME/ros2_ws/install/setup.$CURRENT_SHELL" ] || source "$HOME/ros2_ws/install/setup.$CURRENT_SHELL"
 export ROS_DOMAIN_ID=41
 export ROS_LOCALHOST_ONLY=1
 export ROS_RUNTIME_DIRECTORY="$HOME/scorpio_runtime"
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 export CYCLONEDDS_URI=${CYCLONEDDS_URI:-"<CycloneDDS><Domain><Discovery><ParticipantIndex>auto</ParticipantIndex><MaxAutoParticipantIndex>100</MaxAutoParticipantIndex></Discovery></Domain></CycloneDDS>"}
-export WEB_APP_PATH=$HOME/web_app
+export WEB_APP_PATH="$HOME/web_app"
 
 
 if command -v ccache &> /dev/null; then
@@ -35,6 +35,7 @@ alias grep='grep --color=auto'
 alias web-app='docker run --rm -v "$WEB_APP_PATH"/:/usr/local/apache2/htdocs/ -p 80:80 httpd:alpine'
 alias spt=spotify_player
 alias cout='cowsay_lolcat'
+alias terraform='docker run --rm -it -e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-} -e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-} -e AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-} -v .:/terraform hashicorp/terraform -chdir=/terraform'
 
 case "$XDG_SESSION_TYPE" in
   "x11")
@@ -48,3 +49,7 @@ case "$XDG_SESSION_TYPE" in
       alias pst='wl-paste'
     fi ;;
 esac
+
+! command -v zoxide &> /dev/null || eval "$(zoxide init $CURRENT_SHELL)"
+[ ! -s "$HOME/.local_rc" ] || source "$HOME/.local_rc"
+[ ! -s "$HOME/.secrets" ] || source "$HOME/.secrets"
