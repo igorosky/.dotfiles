@@ -2,6 +2,15 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+if [ "$VSCODE_INJECTION" -ne '1' ] && [ "$ZED_TERM" != 'true' ] && command -v tmux >/dev/null 2>&1 && [[ ! $TERM =~ screen ]] && [ -z "$TMUX" ]; then
+    exec tmux new-session -A -s main
+fi
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
@@ -52,7 +61,7 @@ bindkey "^H" backward-kill-word
 bindkey "^[[3;5~" kill-word
 
 # History
-HISTSIZE=1000
+HISTSIZE=10000
 HISTFILE=~/.zsh_history
 SAVEHIST=$HISTSIZE
 HISTDUP=erase
@@ -68,21 +77,50 @@ setopt hist_find_no_dups
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-#if command -v bat &> /dev/null || "$HOME/.bin/update_bat"; then
-#  zstyle ':fzf-tab:complete:*:*' fzf-preview '
-#    zsh -c "
-#      if [ -z $realpath ]; then
-#        true
-#      elif [[ -d $realpath ]]; then
-#        ls -F --color=always $realpath
-#      elif [[ -f $realpath ]]; then
-#        bat --color=always --style=numbers,changes --line-range :500 $realpath 2>/dev/null
-#      fi
-#    "
-#  '
-#else
-#  zstyle ':fzf-tab:complete:*:*' fzf-preview 'ls --color $realpath'
-#fi
+zstyle ':fzf-tab:complete:*:*' fzf-preview '
+  if [[ -d $realpath ]]; then
+    # Directory: eza -> ls
+    if command -v git >/dev/null 2>&1; then
+      if [[ "$(git -C "$realpath" rev-parse --is-inside-work-tree)" == "true" ]]; then
+        git -C "$realpath" -c color.status=always status -sb
+        echo "---"
+      fi
+    fi
+    if command -v eza >/dev/null 2>&1; then
+      eza -1 --color=always "$realpath"
+    else
+      ls -1 --color=always "$realpath"
+    fi
+  elif [[ -f $realpath ]]; then
+    case "$realpath" in
+      *.zip) unzip -l "$realpath" ;;
+      *.tar) tar -tf "$realpath" ;;
+      *.tar.gz|*.tgz) tar -ztf "$realpath" ;;
+      *.tar.bz2|*.tbz2) tar -jtf "$realpath" ;;
+      *.tar.xz|*.txz) tar -Jtf "$realpath" ;;
+      *)
+        # If not an archive, check if it is a binary or text file
+        if [[ $(file -b --mime-encoding "$realpath") == binary ]]; then
+          echo "Binary File\n---"
+          file "$realpath"
+        else
+          # Text file: bat -> cat
+          if command -v bat >/dev/null 2>&1; then
+            bat --color=always --style=numbers --line-range=:500 "$realpath"
+          else
+            cat "$realpath"
+          fi
+        fi
+        ;;
+    esac
+  fi'
+
+zstyle ':fzf-tab:complete:*:*' fzf-flags \
+  '--height=60%' \
+  '--layout=reverse' \
+  '--preview-window=right:60%:wrap:hidden' \
+  '--bind=ctrl-/:toggle-preview' \
+  '--bind=tab:accept'
 
 # Shell integrations
 source <(fzf --zsh)

@@ -8,6 +8,10 @@ case $- in
       *) return;;
 esac
 
+if [ "$VSCODE_INJECTION" -ne '1' ] && [ "$ZED_TERM" != 'true' ] && command -v tmux >/dev/null 2>&1 && [[ ! $TERM =~ screen ]] && [ -z "$TMUX" ]; then
+    exec tmux new-session -A -s main
+fi
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
