@@ -81,7 +81,7 @@ zstyle ':fzf-tab:complete:*:*' fzf-preview '
   if [[ -d $realpath ]]; then
     # Directory: eza -> ls
     if command -v git >/dev/null 2>&1; then
-      if [[ "$(git -C "$realpath" rev-parse --is-inside-work-tree)" == "true" ]]; then
+      if [[ "$(git -C "$realpath" rev-parse --is-inside-work-tree 2> /dev/null)" == "true" ]]; then
         git -C "$realpath" -c color.status=always status -sb
         echo "---"
       fi
