@@ -1,0 +1,24 @@
+#!/bin/bash
+
+set -e
+
+if ! command -v tmux &> /dev/null; then
+    sudo apt-get update && sudo apt-get install tmux
+fi
+
+TARGET_PATH="${HOME}/.config/tmux/plugins/"
+
+if [ ! -d "${TARGET_PATH}/tmux-cpu" ]; then
+    mkdir -p "${TARGET_PATH}/tmux-cpu"
+    git clone https://github.com/tmux-plugins/tmux-cpu "${TARGET_PATH}/tmux-cpu"
+fi
+
+if [ ! -d "${TARGET_PATH}/tmux-battery" ]; then
+    mkdir -p "${TARGET_PATH}/tmux-battery"
+    git clone -b v2.0.0 https://github.com/tmux-plugins/tmux-battery "${TARGET_PATH}/tmux-battery"
+fi
+
+if [ ! -d "${TARGET_PATH}/catppuccin" ]; then
+    mkdir -p "${TARGET_PATH}/catppuccin"
+    git clone -b v2.3.0 https://github.com/catppuccin/tmux.git "${TARGET_PATH}/catppuccin/tmux"
+fi
