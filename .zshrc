@@ -175,6 +175,7 @@ fi
 [ -s $COMPLETIONS_DIR/_spotify_player ] || ! command -v spotify_player &> /dev/null || spotify_player generate zsh > $COMPLETIONS_DIR/_spotify_player
 [ -s $COMPLETIONS_DIR/_git-lfs ] || ! command -v git-lfs &> /dev/null || git-lfs completion zsh > $COMPLETIONS_DIR/_git-lfs
 [ -s $COMPLETIONS_DIR/_ast-grep ] || ! command -v ast-grep &> /dev/null || ast-grep completions zsh > $COMPLETIONS_DIR/_ast-grep
+[ -s $COMPLETIONS_DIR/_rg ] || ! command -v rg &> /dev/null || rg --generate=complete-zsh > $COMPLETIONS_DIR/_rg
 
 # Load autocompletions
 autoload -Uz compinit && compinit
