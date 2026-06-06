@@ -1,0 +1,114 @@
+#!/bin/sh
+
+set -e
+
+SERVICE_NAME='battery_limit.service'
+SERVICE_PATH="/etc/systemd/system/${SERVICE_NAME}"
+BATTERY_THRESHOLD='/sys/class/power_supply/BAT0/charge_control_end_threshold'
+
+if ! cat "${BATTERY_THRESHOLD}" 2> /dev/null | grep -E '^[0-9]+$' > /dev/null; then
+  echo 'This battery does not support charge control end threshold' 2>&1
+  exit 1
+fi
+
+help() {
+  NAME=$(basename $0)
+  echo "Usage: $NAME [flags...] [value]"
+  echo "Flags:"
+  echo "  -c  --create   Create the systemctl service"
+  echo "  -d  --disable  Disable the systemctl service if exists"
+  echo "  -e  --enable   Enable the systemctl service if exists"
+  echo "  -h  --help     Displays this message"
+  echo "  -r  --remove   Remove the systemctl service"
+  echo "  -s  --status   Prints status of systemctl service"
+  echo "Value: max charge level - defaults to 80 if not provided"
+}
+
+is_created() {
+  [ -f "${SERVICE_PATH}" ]
+}
+
+create() {
+  cat << EOF | sudo tee "${SERVICE_PATH}" > /dev/null
+[Unit]
+Description=This service set battery charging limit
+
+[Service]
+Restart=no
+Type=oneshot
+ExecStart=/bin/sh -c 'echo "${1}" > "${BATTERY_THRESHOLD}"'
+Environment='TEST=test'
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  echo "Created a service with percentage set to: ${1}"
+}
+
+remove() {
+  if is_created; then
+    sudo rm -rf "${SERVICE_PATH}"
+  else
+    echo "Service does not exit" >&2
+  fi
+}
+
+i=0
+for ARG in "$@"; do
+  i=$((i+1))
+  if echo "$ARG" | grep -E '^[0-9]+$' > /dev/null; then
+    if [ -z "$VALUE" ]; then
+      VALUE="$ARG"
+    else
+      echo "More than one value is provided. First: $VALUE as ${i}. argument and then $ARG as ${i}. argument" 2>&1
+      exit 1
+    fi
+  fi
+done
+if [ -z "$VALUE" ]; then
+  VALUE='80'
+fi
+
+ANYTHING_DONE=0
+for ARG in "$@"; do
+  case "$ARG" in
+    '-c'|'--create')
+      create "${VALUE}"
+      ANYTHING_DONE=1
+    ;;
+    '-d'|'--disable')
+      sudo systemctl disable "${SERVICE_NAME}"
+      echo "Service disabled"
+      ANYTHING_DONE=1
+    ;;
+    '-e'|'--enable')
+      sudo systemctl disable "${SERVICE_NAME}"
+      echo "Service enabled"
+      ANYTHING_DONE=1
+    ;;
+    '-r'|'--remove')
+      remove
+      ANYTHING_DONE=1
+    ;;
+    '-s'|'--status')
+      echo "Current battery threshold is set to:"
+      cat "${BATTERY_THRESHOLD}"
+      if is_created; then
+        echo "Service is created and is set to:"
+        cat "${SERVICE_PATH}" | grep 'ExecStart' | sed -E -n 's/.*echo "([0-9]+)".*/\1/p'
+      else
+        echo "Service is not created"
+      fi
+      ANYTHING_DONE=1
+    ;;
+    '-h'|'--help')
+      help
+      ANYTHING_DONE=1
+    ;;
+  esac
+done
+
+if [ "${ANYTHING_DONE}" -eq '0' ]; then
+  sudo sh -c "echo '${VALUE}' > "${BATTERY_THRESHOLD}""
+  echo "Battery threshold set to: ${VALUE}"
+fi

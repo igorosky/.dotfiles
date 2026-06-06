@@ -7,7 +7,7 @@ if ! command -v curl > /dev/null 2>&1; then
   exit 1
 fi
 
-url="https://github.com/junegunn/fzf/releases/download/v0.62.0/fzf-0.62.0-linux_amd64.tar.gz"
+url="https://github.com/junegunn/fzf/releases/download/v0.73.1/fzf-0.73.1-linux_amd64.tar.gz"
 tmp="/tmp/fzf.tar.gz"
 echo 'Downloading newset version'
 curl -L -o $tmp $url
