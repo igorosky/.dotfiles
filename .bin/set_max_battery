@@ -32,6 +32,7 @@ create() {
   cat << EOF | sudo tee "${SERVICE_PATH}" > /dev/null
 [Unit]
 Description=This service set battery charging limit
+After=sysinit.target
 
 [Service]
 Restart=no
@@ -40,7 +41,7 @@ ExecStart=/bin/sh -c 'echo "${1}" > "${BATTERY_THRESHOLD}"'
 Environment='TEST=test'
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 EOF
   echo "Created a service with percentage set to: ${1}"
 }
@@ -48,6 +49,7 @@ EOF
 remove() {
   if is_created; then
     sudo rm -rf "${SERVICE_PATH}"
+    echo "Service removed"
   else
     echo "Service does not exit" >&2
   fi
@@ -82,7 +84,7 @@ for ARG in "$@"; do
       ANYTHING_DONE=1
     ;;
     '-e'|'--enable')
-      sudo systemctl disable "${SERVICE_NAME}"
+      sudo systemctl enable "${SERVICE_NAME}"
       echo "Service enabled"
       ANYTHING_DONE=1
     ;;
