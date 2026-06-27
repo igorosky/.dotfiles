@@ -23,8 +23,8 @@ fi
 
 alias mountnfs="sudo mount 10.0.0.1:/mnt/nfs/ /mnt/nfs"
 alias ssr="ssh nvidia@10.0.0.1"
+alias ssb="ssh nvidia@10.0.0.3"
 alias ssp="ssh ubuntu@10.0.0.10"
-# alias ssb="ssh nvidia@10.0.0.19"
 
 alias cls=clear
 alias rdep="cd $HOME/ros2_ws && (sudo rosdep init; rosdep update; rosdep install --from-paths src --ignore-src -r -y)"
@@ -53,3 +53,17 @@ esac
 ! command -v zoxide &> /dev/null || eval "$(zoxide init $CURRENT_SHELL)"
 [ ! -s "$HOME/.local_rc" ] || source "$HOME/.local_rc"
 [ ! -s "$HOME/.secrets" ] || source "$HOME/.secrets"
+
+f() {
+  if ! command -v fzf &> /dev/null; then
+    echo "No fzf installed" >&2
+    return 1
+  fi
+  if ! command -v zoxide &> /dev/null; then
+    echo "No zoxide installed" >&2
+    return 1
+  fi
+
+  local DIR
+  DIR="$(zoxide query -l $@ | fzf $(cat "${FZF_DEFAULT_OPTS_FILE}") --preview="${FZF_PREVIEW_COMMAND_FILE} {}")" && z "$DIR"
+}

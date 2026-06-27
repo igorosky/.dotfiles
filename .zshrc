@@ -73,54 +73,16 @@ setopt hist_save_no_dups
 setopt hist_ignore_dups
 setopt hist_find_no_dups
 
+FZF_DEFAULT_OPTS_FILE="${HOME}/.fzf_config/fzf_default_opts"
+FZF_PREVIEW_COMMAND_FILE="${HOME}/.fzf_config/fzf_preview"
+
 # Completion styling
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 zstyle ':completion:*' menu no
-zstyle ':fzf-tab:complete:*:*' fzf-preview '
-  if [[ -d $realpath ]]; then
-    # Directory: eza -> ls
-    if command -v git >/dev/null 2>&1; then
-      if [[ "$(git -C "$realpath" rev-parse --is-inside-work-tree 2> /dev/null)" == "true" ]]; then
-        git -C "$realpath" -c color.status=always status -sb
-        echo "---"
-      fi
-    fi
-    if command -v eza >/dev/null 2>&1; then
-      eza -1 --color=always "$realpath"
-    else
-      ls -1 --color=always "$realpath"
-    fi
-  elif [[ -f $realpath ]]; then
-    case "$realpath" in
-      *.zip) unzip -l "$realpath" ;;
-      *.tar) tar -tf "$realpath" ;;
-      *.tar.gz|*.tgz) tar -ztf "$realpath" ;;
-      *.tar.bz2|*.tbz2) tar -jtf "$realpath" ;;
-      *.tar.xz|*.txz) tar -Jtf "$realpath" ;;
-      *)
-        # If not an archive, check if it is a binary or text file
-        if [[ $(file -b --mime-encoding "$realpath") == binary ]]; then
-          echo "Binary File\n---"
-          file "$realpath"
-        else
-          # Text file: bat -> cat
-          if command -v bat >/dev/null 2>&1; then
-            bat --color=always --style=numbers --line-range=:500 "$realpath"
-          else
-            cat "$realpath"
-          fi
-        fi
-        ;;
-    esac
-  fi'
+zstyle ':fzf-tab:complete:*:*' fzf-preview "${FZF_PREVIEW_COMMAND_FILE} \$realpath"
 
-zstyle ':fzf-tab:complete:*:*' fzf-flags \
-  '--height=60%' \
-  '--layout=reverse' \
-  '--preview-window=right:60%:wrap:hidden' \
-  '--bind=ctrl-/:toggle-preview' \
-  '--bind=tab:accept'
+zstyle ':fzf-tab:complete:*:*' fzf-flags $(cat "${FZF_DEFAULT_OPTS_FILE}")
 
 # Shell integrations
 source <(fzf --zsh)

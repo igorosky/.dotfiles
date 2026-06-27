@@ -121,5 +121,9 @@ if ! shopt -oq posix; then
 fi
 
 CURRENT_SHELL=bash
+
+FZF_DEFAULT_OPTS_FILE="${HOME}/.fzf_config/fzf_default_opts"
+FZF_PREVIEW_COMMAND_FILE="${HOME}/.fzf_config/fzf_preview"
+
 source ~/.rc
 # . "$HOME/.cargo/env"

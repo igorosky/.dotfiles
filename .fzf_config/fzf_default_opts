@@ -1,0 +1,5 @@
+--height=60%
+--layout=reverse
+--preview-window=right:60%:wrap:hidden
+--bind=ctrl-/:toggle-preview
+--bind=tab:accept
