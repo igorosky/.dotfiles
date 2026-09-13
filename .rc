@@ -1,5 +1,6 @@
 PATH="$PATH:$HOME/.bin:$HOME/.local/bin:/opt/go/bin"
 [ ! -s "$HOME"/.cargo/bin ] || PATH="$PATH:$HOME/.cargo/bin"
+[ ! -s "$HOME"/.local/kitty.app/bin ] || PATH="$PATH:$HOME/.local/kitty.app/bin"
 
 [ ! -s "/opt/ros/humble/setup.$CURRENT_SHELL" ] || source "/opt/ros/humble/setup.$CURRENT_SHELL"
 [ ! -s "$HOME/ros2_ws/install/setup.$CURRENT_SHELL" ] || source "$HOME/ros2_ws/install/setup.$CURRENT_SHELL"
@@ -23,7 +24,7 @@ fi
 
 alias mountnfs="sudo mount 10.0.0.1:/mnt/nfs/ /mnt/nfs"
 alias ssr="ssh nvidia@10.0.0.1"
-alias ssb="ssh nvidia@10.0.0.3"
+alias ssb="ssh ubuntu@10.0.0.3"
 alias ssp="ssh ubuntu@10.0.0.10"
 
 alias cls=clear

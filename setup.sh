@@ -23,6 +23,11 @@ if [ "$YN" = 'y' ];  then
   "$DOTFILES_DIR/.bin/install_zen"
 fi
 
+read -p "Want to install kitty?: [y/N]:" YN
+if [ "$YN" = 'y' ];  then
+  "$DOTFILES_DIR/.bin/install_kitty"
+fi
+
 read -p "Want to install cowsay and lolcat?: [y/N]:" YN
 if [ "$YN" = 'y' ];  then
   sudo apt-get install -y cowsay lolcat > /dev/null
