@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+command -v cargo &> /dev/null || (echo "No cargo found" >&2 && exit 1)
+
+cargo install git-delta
+git config --global core.pager delta
+git config --global interactive.diffFilter 'delta --color-only'
+git config --global delta.navigate true
+git config --global delta.dark true  # or `delta.light true`, or omit for auto-detection
+git config --global merge.conflictStyle diff3
+cargo install ripgrep --features 'pcre2'
+cargo install ast-grep --locked
