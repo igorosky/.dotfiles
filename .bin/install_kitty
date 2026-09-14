@@ -10,7 +10,7 @@ cp "$HOME/.local/kitty.app/share/applications/kitty.desktop" "$HOME/.local/share
 sed -i "s|Icon=kitty|Icon=$(readlink -f ~)/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" "$HOME"/.local/share/applications/kitty*.desktop
 sed -i "s|Exec=kitty|Exec=$(readlink -f ~)/.local/kitty.app/bin/kitty|g" "$HOME"/.local/share/applications/kitty*.desktop
 
-cat <<EOF
+cat <<EOF > "$HOME/.config/kitty/kitty.conf"
 # vim:ft=kitty
 ## name: Night Owl
 ## author: Luke Glazebrook <lukeglazebrook@hey.com>
@@ -76,7 +76,13 @@ inactive_tab_background #01121f
 window_padding_width 10
 background_opacity 0.95
 hide_window_decorations no
-EOF > "$HOME/.config/kitty/kitty.conf"
+
+font_family      JetBrainsMonoNL Nerd Font Mono
+bold_font        auto
+italic_font      auto
+bold_italic_font auto
+font_size        12.0
+EOF
 
 echo "Setting kitty as default"
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator $(which kitty) 50
